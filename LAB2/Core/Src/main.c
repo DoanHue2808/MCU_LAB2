@@ -59,6 +59,7 @@ static void MX_TIM2_Init(void);
 const int MAX_LED = 4;
 int index_led = 0;
 int led_buffer[4] = {1,2,3,4};
+int hour = 15, minute = 8, second = 50;
 void display7SEG(int num) {
 	switch (num) {
 		case 0:
@@ -135,6 +136,12 @@ void update7SEG(int index) {
 			break;
 	}
 }
+void updateClockBuffer() {
+	led_buffer[0] = (int) (hour/10);
+	led_buffer[1] = (int) (hour%10);
+	led_buffer[2] = (int) (minute/10);
+	led_buffer[3] = (int) (minute%10);
+}
 /* USER CODE END 0 */
 
 /**
@@ -175,7 +182,20 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+	  second++;
+	  if (second >= 60) {
+		  second = 0;
+		  minute ++;
+	  }
+	  if(minute >= 60) {
+		  minute = 0;
+		  hour ++;
+	  }
+	  if(hour >=24){
+		  hour = 0;
+	  }
+	  updateClockBuffer();
+	  HAL_Delay(1000) ;
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
